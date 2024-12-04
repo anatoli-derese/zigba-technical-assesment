@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:zigba/Blocs/bloc/Company/company_bloc.dart';
 import 'package:zigba/Pages/auth_page.dart';
+import 'package:zigba/Pages/bottom_navigation.dart';
 import 'package:zigba/Pages/landing_page.dart';
+import 'package:zigba/Pages/register_company.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,10 +19,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthPage(),
+      home: const Pages(),
     );
   }
 }
+
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});

@@ -49,7 +49,7 @@ class _LandingPageState extends State<LandingPage> with SingleTickerProviderStat
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/images/image.png', 
+                  'assets/images/logo.png', 
                   width: 120,
                   height: 120,
                   color: Colors.white,
