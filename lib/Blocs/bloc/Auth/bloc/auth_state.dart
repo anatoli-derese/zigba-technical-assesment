@@ -13,6 +13,5 @@ final class NotLoggedIn extends AuthState {}
 
 final class AuthError extends AuthState {
   final String message;
-
   AuthError(this.message);
 }

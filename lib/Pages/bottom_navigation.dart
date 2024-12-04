@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:zigba/Pages/Home/home_page.dart';
-import 'package:zigba/Pages/add_employee';
+import 'package:zigba/Pages/add_employee.dart';
+
 
 
 class Pages extends StatelessWidget {

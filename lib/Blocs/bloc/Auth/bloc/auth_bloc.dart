@@ -7,8 +7,6 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
-  
-
   AuthBloc({required this.authRepository}) : super(AuthInitial()) {
     on<LoginEvent>(_onLogin);
     on<LogoutEvent>(_onLogout);
@@ -36,7 +34,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onCheckLoggedIn(CheckLoggedInEvent event, Emitter<AuthState> emit) {
+    print("checking ");
     final isLoggedIn = authRepository.isLoggedIn();
+    print(isLoggedIn);
     if (isLoggedIn) {
       emit(LoggedIn());
     } else {

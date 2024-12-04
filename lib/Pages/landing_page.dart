@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zigba/Pages/auth_page.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -99,7 +100,14 @@ class _LandingPageState extends State<LandingPage> with SingleTickerProviderStat
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AuthPage(isLogin: true),
+                                  ),
+                                );  
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.grey[200],
                               foregroundColor: Colors.black,
@@ -115,6 +123,12 @@ class _LandingPageState extends State<LandingPage> with SingleTickerProviderStat
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AuthPage(isLogin: false),
+                                  ),
+                                );  
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.grey[200],

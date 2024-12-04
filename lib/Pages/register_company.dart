@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CompanyRegistrationPage extends StatefulWidget {
-  const CompanyRegistrationPage({Key? key}) : super(key: key);
+  const CompanyRegistrationPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CompanyRegistrationPageState createState() => _CompanyRegistrationPageState();
 }
 

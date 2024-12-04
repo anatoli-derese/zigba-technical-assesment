@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+  late bool isLogin; 
+  AuthPage({super.key, required this.isLogin});
   @override
   State<AuthPage> createState() => _AuthPageState();
 }
 
 class _AuthPageState extends State<AuthPage> {
-  bool isLogin = false;
+  bool get isLogin => widget.isLogin;
   bool _obscurePassword = true;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -19,9 +21,9 @@ class _AuthPageState extends State<AuthPage> {
     super.dispose();
   }
 
-  void _toggleAuthMode() {
+   void _toggleAuthMode() {
     setState(() {
-      isLogin = !isLogin;
+      widget.isLogin = !widget.isLogin;
     });
   }
 
