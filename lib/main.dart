@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:zigba/Blocs/bloc/Auth/bloc/auth_bloc.dart';
 import 'package:zigba/Blocs/bloc/Company/company_bloc.dart';
 import 'package:zigba/Blocs/bloc/Employees/employee_bloc.dart';
@@ -15,7 +16,12 @@ void main() async {
   await Hive.initFlutter();
   final authBox = await Hive.openBox('authBox');
   final authRepository = AuthRepository(authBox);
-  runApp(MyApp(authRepository: authRepository));
+  runApp(
+    Phoenix(
+      child: MyApp(authRepository: authRepository
+      ),
+    )
+    );
 }
 
 
@@ -55,7 +61,6 @@ class AppNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
   builder: (context, state) {
-    print("AuthBloc State: $state"); // Debugging state transitions
     if (state is AuthLoading) {
       return const Center(child: CircularProgressIndicator());
     } else if (state is LoggedIn) {
@@ -71,8 +76,5 @@ class AppNavigator extends StatelessWidget {
     }
     return const SizedBox.shrink();
   },
-);
-
-    
-    }
+);}
 }

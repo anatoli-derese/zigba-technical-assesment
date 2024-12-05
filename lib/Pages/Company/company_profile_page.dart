@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zigba/Blocs/bloc/Auth/bloc/auth_bloc.dart';
 import 'package:zigba/Blocs/bloc/Company/company_bloc.dart';
@@ -90,10 +91,11 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                       IconButton(
                         icon: const Icon(Icons.logout),
                         onPressed: () {
-                          print("logout");
-                          final authBloc = BlocProvider.of<AuthBloc>(context); // Explicit lookup
                           
+                          final authBloc = BlocProvider.of<AuthBloc>(context); // Explicit lookup
                           authBloc.add(LogoutEvent());
+                          // restart the app
+                          Phoenix.rebirth(context);
                           // context.read<AuthBloc>().add(LogoutEvent());
                         },
                       ),
