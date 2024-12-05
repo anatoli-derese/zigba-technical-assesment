@@ -1,7 +1,7 @@
+import 'package:Demoz/Blocs/bloc/Company/company_bloc.dart';
+import 'package:Demoz/Pages/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zigba/Blocs/bloc/Company/company_bloc.dart';
-import 'package:zigba/Pages/bottom_navigation.dart';
 
 class CompanyRegistrationPage extends StatefulWidget {
   const CompanyRegistrationPage({super.key});

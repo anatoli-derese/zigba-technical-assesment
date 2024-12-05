@@ -1,7 +1,6 @@
+import 'package:Demoz/Models/Company.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zigba/Models/Company.dart';
-
 part 'company_event.dart';
 part 'company_state.dart';
 

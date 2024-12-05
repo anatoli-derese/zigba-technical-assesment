@@ -1,9 +1,9 @@
+import 'package:Demoz/Blocs/bloc/Auth/bloc/auth_bloc.dart';
+import 'package:Demoz/Blocs/bloc/Company/company_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zigba/Blocs/bloc/Auth/bloc/auth_bloc.dart';
-import 'package:zigba/Blocs/bloc/Company/company_bloc.dart';
 
 class CompanyProfilePage extends StatefulWidget {
   const CompanyProfilePage({super.key});

@@ -1,24 +1,31 @@
 
+import 'package:Demoz/Blocs/bloc/Auth/bloc/auth_bloc.dart';
+import 'package:Demoz/Blocs/bloc/Company/company_bloc.dart';
+import 'package:Demoz/Blocs/bloc/Employees/employee_bloc.dart';
+import 'package:Demoz/Models/Employee.dart';
+import 'package:Demoz/Pages/bottom_navigation.dart';
+import 'package:Demoz/Pages/landing_page.dart';
+import 'package:Demoz/Repository/auth_repository.dart';
+import 'package:Demoz/Repository/employee_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:zigba/Blocs/bloc/Auth/bloc/auth_bloc.dart';
-import 'package:zigba/Blocs/bloc/Company/company_bloc.dart';
-import 'package:zigba/Blocs/bloc/Employees/employee_bloc.dart';
-import 'package:zigba/Pages/bottom_navigation.dart';
-import 'package:zigba/Pages/landing_page.dart';
-import 'package:zigba/Repository/auth_repository.dart';
-import 'package:zigba/Repository/employee_repository.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  Hive.registerAdapter(EmployeeAdapter());
+  final employeeBox = await Hive.openBox<Employee>('employee');
   final authBox = await Hive.openBox('authBox');
   final authRepository = AuthRepository(authBox);
+  final employeeRepository = EmployeeRepository(employeeBox);
   runApp(
     Phoenix(
-      child: MyApp(authRepository: authRepository
+      child: MyApp(
+        authRepository: authRepository,
+        employeeRepository: employeeRepository,
       ),
     )
     );
@@ -27,8 +34,10 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final AuthRepository authRepository;  
-  MyApp({required this.authRepository, super.key});
-  final EmployeeRepository employeeRepository = EmployeeRepository();
+  final EmployeeRepository employeeRepository;
+  MyApp({required this.authRepository, required this.employeeRepository, super.key});
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +47,7 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthBloc(authRepository: authRepository)..add(CheckLoggedInEvent()), 
         ),
         BlocProvider<EmployeeBloc>(
-          create: (_) => EmployeeBloc(employeeRepository: employeeRepository),
+          create: (_) => EmployeeBloc(employeeRepository: employeeRepository)..add(GetEmployeesEvent()),
         ),
         BlocProvider<CompanyBloc>(
           create: (_) => CompanyBloc(),
@@ -76,5 +85,6 @@ class AppNavigator extends StatelessWidget {
     }
     return const SizedBox.shrink();
   },
-);}
+);
+    }
 }

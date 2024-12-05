@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:Demoz/Repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zigba/Repository/auth_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

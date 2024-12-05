@@ -1,7 +1,7 @@
+import 'package:Demoz/Blocs/bloc/Employees/employee_bloc.dart';
+import 'package:Demoz/Pages/Employee/add_employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zigba/Blocs/bloc/Employees/employee_bloc.dart';
-import 'package:zigba/Pages/Employee/add_employee.dart';
 
 class EmployeePage extends StatelessWidget {
   const EmployeePage({super.key});
@@ -92,7 +92,10 @@ class EmployeePage extends StatelessWidget {
                                   shape: const RoundedRectangleBorder(
                                      borderRadius: BorderRadius.all(Radius.circular(8)),
                                    ),),
-                                     onPressed: () {},
+                                     onPressed: () {
+                                      final employeeBloc = BlocProvider.of<EmployeeBloc>(context);
+                                      employeeBloc.add(RemoveEmployeeEvent(tin: employee.tin));
+                                     },
                                      child: const Text('Pay'),
                                     ),
                               ),

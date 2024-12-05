@@ -1,8 +1,8 @@
+import 'package:Demoz/Pages/Company/company_profile_page.dart';
+import 'package:Demoz/Pages/Employee/employee_list.dart';
+import 'package:Demoz/Pages/Home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:zigba/Pages/Home/home_page.dart';
-import 'package:zigba/Pages/Company/company_profile_page.dart';
-import 'package:zigba/Pages/Employee/employee_list.dart';
 
 
 

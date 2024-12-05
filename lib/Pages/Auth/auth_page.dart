@@ -1,8 +1,7 @@
+import 'package:Demoz/Blocs/bloc/Auth/bloc/auth_bloc.dart';
+import 'package:Demoz/Pages/Company/register_company.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zigba/Blocs/bloc/Auth/bloc/auth_bloc.dart';
-import 'package:zigba/Pages/Company/register_company.dart';
-
 
 // ignore: must_be_immutable
 class AuthPage extends StatefulWidget {

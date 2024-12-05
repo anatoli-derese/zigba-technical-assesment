@@ -1,7 +1,7 @@
+import 'package:Demoz/Models/Employee.dart';
+import 'package:Demoz/Repository/employee_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zigba/Models/Employee.dart';
-import 'package:zigba/Repository/employee_repository.dart';
 
 part 'employee_event.dart';
 part 'employee_state.dart';

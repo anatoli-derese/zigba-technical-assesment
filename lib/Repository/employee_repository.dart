@@ -1,29 +1,24 @@
-import 'package:zigba/Models/Employee.dart';
+import 'package:Demoz/Models/Employee.dart';
+import 'package:hive/hive.dart';
 
 class EmployeeRepository {
-  List<Employee> _employees = []; 
+  final Box<Employee> _employeeBox;
+
+  EmployeeRepository(this._employeeBox);
 
   void addEmployee(Employee employee) {
-    _employees.add(employee);
+    _employeeBox.put(employee.tin, employee);    
   }
 
   bool deleteEmployee(int tin) {
-    List<Employee> newEmloyees = [];
-    bool flag = false;
-    for (Employee employee in _employees) {
-      if (employee.tin != tin) {
-        newEmloyees.add(employee);
-      }
-      else{
-        flag = true;
-      }
+    if (_employeeBox.containsKey(tin)) {
+      _employeeBox.delete(tin);
+      return true;
     }
-    _employees = newEmloyees;
-    return flag;
-
+    return false;
   }
 
   List<Employee> getAllEmployees() {
-    return _employees;
+    return _employeeBox.values.toList();
   }
 }

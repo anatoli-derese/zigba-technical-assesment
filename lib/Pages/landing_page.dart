@@ -1,5 +1,5 @@
+import 'package:Demoz/Pages/Auth/auth_page.dart';
 import 'package:flutter/material.dart';
-import 'package:zigba/Pages/Auth/auth_page.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
