@@ -2,10 +2,13 @@
 import 'package:Demoz/Blocs/bloc/Auth/bloc/auth_bloc.dart';
 import 'package:Demoz/Blocs/bloc/Company/company_bloc.dart';
 import 'package:Demoz/Blocs/bloc/Employees/employee_bloc.dart';
+import 'package:Demoz/Models/Company.dart';
 import 'package:Demoz/Models/Employee.dart';
+import 'package:Demoz/Pages/Company/register_company.dart';
 import 'package:Demoz/Pages/bottom_navigation.dart';
 import 'package:Demoz/Pages/landing_page.dart';
 import 'package:Demoz/Repository/auth_repository.dart';
+import 'package:Demoz/Repository/company_repository.dart';
 import 'package:Demoz/Repository/employee_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,15 +20,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(EmployeeAdapter());
+  Hive.registerAdapter(CompanyAdapter());
   final employeeBox = await Hive.openBox<Employee>('employee');
   final authBox = await Hive.openBox('authBox');
+  final companyBox = await Hive.openBox<Company>('company');
+
   final authRepository = AuthRepository(authBox);
   final employeeRepository = EmployeeRepository(employeeBox);
+  final companyRepository = CompanyRepository(companyBox);
   runApp(
     Phoenix(
       child: MyApp(
         authRepository: authRepository,
         employeeRepository: employeeRepository,
+        companyRepository: companyRepository,
       ),
     )
     );
@@ -35,7 +43,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   final AuthRepository authRepository;  
   final EmployeeRepository employeeRepository;
-  MyApp({required this.authRepository, required this.employeeRepository, super.key});
+  final CompanyRepository companyRepository;
+  MyApp({required this.authRepository, required this.employeeRepository,required this.companyRepository, super.key});
 
   
 
@@ -50,7 +59,7 @@ class MyApp extends StatelessWidget {
           create: (_) => EmployeeBloc(employeeRepository: employeeRepository)..add(GetEmployeesEvent()),
         ),
         BlocProvider<CompanyBloc>(
-          create: (_) => CompanyBloc(),
+          create: (_) => CompanyBloc(companyRepository)..add(CheckCompanyRegistered()),
         ),
       ],
       child: MaterialApp(
@@ -69,22 +78,32 @@ class AppNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
-  builder: (context, state) {
-    if (state is AuthLoading) {
+  builder: (context, authState) {
+    if (authState is AuthLoading) {
       return const Center(child: CircularProgressIndicator());
-    } else if (state is LoggedIn) {
-      return const Pages();
-    } else if (state is NotLoggedIn || state is AuthInitial) {
-      return const LandingPage();
-    } else if (state is AuthError) {
+    } else if (authState is LoggedIn) {
+      return BlocBuilder<CompanyBloc, CompanyState>(
+        builder: (context, companyState) {
+          print(companyState);
+          if (companyState is CompanyRegistered) {
+            return const Pages(); 
+          } else {
+            return const CompanyRegistrationPage(); 
+          }
+        },
+      );
+    } else if (authState is NotLoggedIn || authState is AuthInitial) {
+      return const LandingPage(); // Not logged in
+    } else if (authState is AuthError) {
       return Scaffold(
         body: Center(
-          child: Text('Error: ${state.message}'),
+          child: Text('Error: ${authState.message}'),
         ),
       );
     }
     return const SizedBox.shrink();
   },
 );
-    }
+
+}
 }

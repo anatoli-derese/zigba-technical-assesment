@@ -1,20 +1,35 @@
 import 'package:Demoz/Models/Company.dart';
+import 'package:Demoz/Repository/company_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 part 'company_event.dart';
 part 'company_state.dart';
 
 class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
-  CompanyBloc() : super(CompanyInitial()) {
+  final CompanyRepository companyRepository;
+
+  CompanyBloc(this.companyRepository) : super(CompanyInitial()) {
     on<RegisterCompanyEvent>(_onRegisterCompany);
     on<UpdateCompanyProfileEvent>(_onUpdateCompanyProfile);
+    on<CheckCompanyRegistered>(_onCheckCompanyRegistered);
   }
+
+  Future<void>_onCheckCompanyRegistered (
+    CheckCompanyRegistered event, Emitter<CompanyState> emit) async {
+      final company = companyRepository.getCompany();
+      if (company != null) {
+        emit(CompanyRegistered(company: company));
+      } else {
+        emit(CompanyNotRegistered());
+      }
+    }
+  
 
   Future<void> _onRegisterCompany(
       RegisterCompanyEvent event, Emitter<CompanyState> emit) async {
     emit(CompanyLoading());
     try {
-      // Validate company details
       _validateCompanyDetails(
         name: event.name,
         address: event.address,
@@ -25,7 +40,6 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
         bankAccount: event.bankAccount,
       );
 
-      // Register the company using the provided details
       final company = Company.register(
         name: event.name,
         address: event.address,
@@ -36,7 +50,12 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
         bankAccount: event.bankAccount,
       );
 
-      emit(CompanyRegistered(company: company));
+      final success = companyRepository.registerCompany(company);
+      if (success) {
+        emit(CompanyRegistered(company: company));
+      } else {
+        emit(CompanyError('Company is already registered.'));
+      }
     } catch (e) {
       emit(CompanyError('Failed to register company: ${e.toString()}'));
     }
@@ -46,7 +65,6 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       UpdateCompanyProfileEvent event, Emitter<CompanyState> emit) async {
     emit(CompanyLoading());
     try {
-      // Validate company details
       _validateCompanyDetails(
         name: event.name,
         address: event.address,
@@ -57,21 +75,24 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
         bankAccount: event.bankAccount,
       );
 
-      final companyState = state;
-      if (companyState is CompanyRegistered) {
-        final updatedCompany = Company.register(
-          name: event.name,
-          address: event.address,
-          phone: event.phone,
-          tin: event.tin,
-          numberOfEmployees: event.numberOfEmployees,
-          bank: event.bank,
-          bankAccount: event.bankAccount,
-        );
-
-        emit(CompanyRegistered(company: updatedCompany)); // Emit the updated state
+      final currentCompany = companyRepository.getCompany();
+      if (currentCompany == null) {
+        throw Exception('No company is registered.');
+      }
+      final updatedCompany = Company.register(
+        name: event.name,
+        address: event.address,
+        phone: event.phone,
+        tin: event.tin,
+        numberOfEmployees: event.numberOfEmployees,
+        bank: event.bank,
+        bankAccount: event.bankAccount,
+      );
+      final success = companyRepository.editCompany(updatedCompany);
+      if (success) {
+        emit(CompanyRegistered(company: updatedCompany));
       } else {
-        throw Exception("Invalid state: Cannot update company profile.");
+        throw Exception('Failed to update company profile.');
       }
     } catch (e) {
       emit(CompanyError('Failed to update company profile: ${e.toString()}'));
@@ -88,7 +109,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     required String bank,
     required String bankAccount,
   }) {
-    if (name.isEmpty || name.runtimeType != String) {
+    if (name.isEmpty) {
       throw Exception('Company name must be a non-empty string.');
     }
     if (address.isEmpty) {

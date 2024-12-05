@@ -23,6 +23,8 @@ final class RegisterCompanyEvent extends CompanyEvent {
   });
 }
 
+final class CheckCompanyRegistered extends CompanyEvent {}
+
 final class UpdateCompanyProfileEvent extends CompanyEvent{
    final String name;
   final String address;
