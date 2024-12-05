@@ -8,14 +8,20 @@ import 'package:zigba/Pages/bottom_navigation.dart';
 import 'package:zigba/Pages/landing_page.dart';
 import 'package:zigba/Repository/auth_repository.dart';
 import 'package:zigba/Repository/employee_repository.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
-  runApp( MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  final authBox = await Hive.openBox('authBox');
+  final authRepository = AuthRepository(authBox);
+  runApp(MyApp(authRepository: authRepository));
 }
 
+
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
-  final AuthRepository authRepository = AuthRepository();
+  final AuthRepository authRepository;  
+  MyApp({required this.authRepository, super.key});
   final EmployeeRepository employeeRepository = EmployeeRepository();
 
   @override

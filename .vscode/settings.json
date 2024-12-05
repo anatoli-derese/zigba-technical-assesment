@@ -1,4 +1,5 @@
 {
     "java.compile.nullAnalysis.mode": "disabled",
-    "cmake.sourceDirectory": "/home/anatoli/zigba/linux"
+    "cmake.sourceDirectory": "/home/anatoli/zigba/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

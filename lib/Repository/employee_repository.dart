@@ -8,17 +8,17 @@ class EmployeeRepository {
   }
 
   bool deleteEmployee(int tin) {
-    List<Employee> new_emloyees = [];
+    List<Employee> newEmloyees = [];
     bool flag = false;
     for (Employee employee in _employees) {
       if (employee.tin != tin) {
-        new_emloyees.add(employee);
+        newEmloyees.add(employee);
       }
       else{
         flag = true;
       }
     }
-    _employees = new_emloyees;
+    _employees = newEmloyees;
     return flag;
 
   }

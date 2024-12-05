@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:zigba/Pages/Home/home_page.dart';
 import 'package:zigba/Pages/add_employee.dart';
+import 'package:zigba/Pages/company_profile_page.dart';
+import 'package:zigba/Pages/employee_list.dart';
 
 
 
@@ -10,18 +12,18 @@ class Pages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PersistentTabController _controller;
-    _controller = PersistentTabController(initialIndex: 0);
+    PersistentTabController controller;
+    controller = PersistentTabController(initialIndex: 0);
 
-    List<Widget> _buildScreens() {
+    List<Widget> buildScreens() {
       return [
         const HomePage(),
-        const AddEmployeePage(),
-        const ProfileScreen(),
+        const EmployeePage(),
+        const CompanyProfilePage(),
       ];
     }
 
-    List<PersistentBottomNavBarItem> _navBarsItems() {
+    List<PersistentBottomNavBarItem> navBarsItems() {
       return [
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.home_rounded),
@@ -43,9 +45,9 @@ class Pages extends StatelessWidget {
 
     return PersistentTabView(
       context,
-      controller: _controller,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
+      controller: controller,
+      screens: buildScreens(),
+      items: navBarsItems(),
       backgroundColor: Colors.white,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,

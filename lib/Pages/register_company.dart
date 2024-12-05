@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zigba/Blocs/bloc/Company/company_bloc.dart';
+import 'package:zigba/Pages/bottom_navigation.dart';
 
 class CompanyRegistrationPage extends StatefulWidget {
   const CompanyRegistrationPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _CompanyRegistrationPageState createState() => _CompanyRegistrationPageState();
 }
 
@@ -57,89 +59,135 @@ class _CompanyRegistrationPageState extends State<CompanyRegistrationPage> {
     super.dispose();
   }
 
+  void _registerCompany() {
+    if (_formKey.currentState!.validate()) {
+      final numberOfEmployees = int.tryParse(_employeesController.text) ?? 0;
+      context.read<CompanyBloc>().add(
+            RegisterCompanyEvent(
+              name: _companyNameController.text,
+              address: _addressController.text,
+              phone: _phoneController.text,
+              tin: _tinNumberController.text,
+              numberOfEmployees: numberOfEmployees,
+              bank: _bankNameController.text,
+              bankAccount: _accountNumberController.text,
+            ),
+          );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: 'Register your company to ',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+    return BlocConsumer<CompanyBloc, CompanyState>(
+      listener: (context, state) {
+        if (state is CompanyRegistered) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Company registered successfully!')),
+          );
+          Navigator.push(context, MaterialPageRoute(builder:  (_) => const Pages()));
+        } else if (state is CompanyError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Stack(
+          children: [
+            Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+              ),
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Register your company to ',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Demoz Payroll',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue[500],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: 'Demoz Payroll',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue[500],
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Register your company to continue',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Register your company to continue',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 24),
-              _buildTextField(_companyNameController, 'Company name'),
-              _buildTextField(_addressController, 'Address of the company'),
-              _buildTextField(_phoneController, 'Phone Number'),
-              _buildTextField(_tinNumberController, 'Tin Number'),
-              _buildTextField(_employeesController, 'Number of employees'),
-              _buildTextField(_bankNameController, 'Company bank'),
-              _buildTextField(_accountNumberController, 'Bank account number'),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isFormValid
-                      ? () {
-                          // Handle form submission
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isFormValid ? Colors.blue : Colors.grey[200],
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    'Submit for approval',
-                    style: TextStyle(fontSize: 16),
+                      const SizedBox(height: 24),
+                      _buildTextField(_companyNameController, 'Company name'),
+                      _buildTextField(_addressController, 'Address of the company'),
+                      _buildTextField(_phoneController, 'Phone Number'),
+                      _buildTextField(_tinNumberController, 'Tin Number'),
+                      _buildTextField(_employeesController, 'Number of employees'),
+                      _buildTextField(_bankNameController, 'Company bank'),
+                      _buildTextField(_accountNumberController, 'Bank account number'),
+                      const SizedBox(height: 24),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: _isFormValid && state is! CompanyLoading
+                              ? _registerCompany
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _isFormValid
+                                ? Colors.blue
+                                : Colors.grey[200],
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: state is CompanyLoading
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text(
+                                  'Submit for approval',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
+            if (state is CompanyLoading)
+              Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 

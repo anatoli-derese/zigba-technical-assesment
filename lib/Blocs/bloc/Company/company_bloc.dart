@@ -9,7 +9,35 @@ part 'company_state.dart';
 class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
   CompanyBloc() : super(CompanyInitial()) {
     on<RegisterCompanyEvent>(_onRegisterCompany);
+    on <UpdateCompanyProfileEvent>(_onUpdateCompanyProfile);
   }
+
+
+Future<void> _onUpdateCompanyProfile(
+    UpdateCompanyProfileEvent event, Emitter<CompanyState> emit) async {
+  emit(CompanyLoading());
+  try {
+    final companyState = state;
+    if (companyState is CompanyRegistered) {
+      final updatedCompany = Company.register(
+        name: event.name,
+        address: event.address,
+        phone: event.phone,
+        tin: event.tin,
+        numberOfEmployees: event.numberOfEmployees,
+        bank: event.bank,
+        bankAccount: event.bankAccount,
+      );
+
+      emit(CompanyRegistered(company: updatedCompany)); // Emit the updated state
+    } else {
+      throw Exception("Invalid state: Cannot update company profile.");
+    }
+  } catch (e) {
+    emit(CompanyError('Failed to update company profile: ${e.toString()}'));
+  }
+}
+
 
   Future<void> _onRegisterCompany(
       RegisterCompanyEvent event, Emitter<CompanyState> emit) async {
@@ -30,4 +58,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       emit(CompanyError('Failed to register company: ${e.toString()}'));
     }
   }
+
+  
+
 }

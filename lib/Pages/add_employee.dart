@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
+import 'package:zigba/Blocs/bloc/Employees/employee_bloc.dart';
+import 'package:zigba/Models/Employee.dart';
 
 class AddEmployeePage extends StatefulWidget {
-  const AddEmployeePage({Key? key}) : super(key: key);
+  const AddEmployeePage({super.key});
 
   @override
   State<AddEmployeePage> createState() => _AddEmployeePageState();
@@ -11,7 +13,7 @@ class AddEmployeePage extends StatefulWidget {
 
 class _AddEmployeePageState extends State<AddEmployeePage> {
   final _formKey = GlobalKey<FormState>();
-  
+
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -19,19 +21,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
   final _grossSalaryController = TextEditingController();
   final _taxableEarningsController = TextEditingController();
   final _startDateController = TextEditingController();
-  
   PaymentType _paymentType = PaymentType.none;
-  
-  bool get _isFormValid {
-    return _nameController.text.isNotEmpty &&
-           _emailController.text.isNotEmpty &&
-           _phoneController.text.isNotEmpty &&
-           _tinController.text.isNotEmpty &&
-           _grossSalaryController.text.isNotEmpty &&
-           _taxableEarningsController.text.isNotEmpty &&
-           _startDateController.text.isNotEmpty &&
-           _paymentType != PaymentType.none;
-  }
 
   @override
   void dispose() {
@@ -54,137 +44,111 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     );
     if (picked != null) {
       setState(() {
-            _startDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+        _startDateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+    return BlocListener<EmployeeBloc, EmployeeState>(
+      listener: (context, state) {
+        if (state is EmployeeAdded) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Employee added: ${state.employee.name}')),
+          );
+          Navigator.pop(context); // Return to the previous page.
+        } else if (state is EmployeeError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: const Text('Add Employee'),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
         ),
-        title: const Text('Add Employee'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            onChanged: () => setState(() {}),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      const TextSpan(
-                        text: 'Add New ',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'Employee',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue[500],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Here you add your new employee and start calculating his tax and salary',
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 24),
-                _buildTextField(
-                  controller: _nameController,
-                  label: 'Employee name',
-                ),
-                _buildTextField(
-                  controller: _emailController,
-                  label: 'Email address',
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                _buildTextField(
-                  controller: _phoneController,
-                  label: 'Phone number',
-                  keyboardType: TextInputType.phone,
-                ),
-                _buildTextField(
-                  controller: _tinController,
-                  label: 'Tin number',
-                ),
-                _buildTextField(
-                  controller: _grossSalaryController,
-                  label: 'Gross salary',
-                  keyboardType: TextInputType.number,
-                ),
-                _buildTextField(
-                  controller: _taxableEarningsController,
-                  label: 'Taxable earnings',
-                  keyboardType: TextInputType.number,
-                ),
-                _buildTextField(
-                  controller: _startDateController,
-                  label: 'Starting date of salary',
-                  readOnly: true,
-                  onTap: () => _selectDate(context),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    _buildPaymentTypeButton(
-                      title: 'per month',
-                      type: PaymentType.monthly,
-                    ),
-                    const SizedBox(width: 12),
-                    _buildPaymentTypeButton(
-                      title: 'per Contract',
-                      type: PaymentType.contract,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _isFormValid
-                        ? () {
-                            if (_formKey.currentState!.validate()) {
-                            }
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[200],
-                      foregroundColor: Colors.black,
-                      disabledBackgroundColor: Colors.grey[200],
-                      disabledForegroundColor: Colors.grey,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text('Add employee'),
-                  ),
-                ),
-              ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildHeader(),
+                  _buildFormFields(),
+                  _buildPaymentTypeSelector(),
+                  const SizedBox(height: 24),
+                  _buildSubmitButton(context),
+                ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              const TextSpan(
+                text: 'Add New ',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              TextSpan(
+                text: 'Employee',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[500],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Here you add your new employee and start calculating his tax and salary',
+          style: TextStyle(color: Colors.grey[600]),
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  Widget _buildFormFields() {
+    return Column(
+      children: [
+        _buildTextField(controller: _nameController, label: 'Employee name'),
+        _buildTextField(controller: _emailController, label: 'Email address', keyboardType: TextInputType.emailAddress),
+        _buildTextField(controller: _phoneController, label: 'Phone number', keyboardType: TextInputType.phone),
+        _buildTextField(controller: _tinController, label: 'TIN number', keyboardType: TextInputType.number),
+        _buildTextField(controller: _grossSalaryController, label: 'Gross salary', keyboardType: TextInputType.number),
+        _buildTextField(controller: _taxableEarningsController, label: 'Taxable earnings', keyboardType: TextInputType.number),
+        _buildTextField(
+          controller: _startDateController,
+          label: 'Starting date of salary',
+          readOnly: true,
+          onTap: () => _selectDate(context),
+        ),
+      ],
     );
   }
 
@@ -213,6 +177,15 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     );
   }
 
+  Widget _buildPaymentTypeSelector() {
+    return Row(
+      children: [
+        _buildPaymentTypeButton(title: 'Per Month', type: PaymentType.monthly),
+        const SizedBox(width: 12),
+        _buildPaymentTypeButton(title: 'Per Contract', type: PaymentType.contract),
+      ],
+    );
+  }
 
   Widget _buildPaymentTypeButton({
     required String title,
@@ -243,6 +216,49 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
         ),
       ),
     );
+  }
+
+  Widget _buildSubmitButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: _isFormValid
+            ? () {
+                if (_formKey.currentState!.validate()) {
+                  final employee = Employee(
+                    name: _nameController.text,
+                    email: _emailController.text,
+                    phone: _phoneController.text,
+                    tin: int.parse(_tinController.text),
+                    grossSalary: int.parse(_grossSalaryController.text),
+                    taxableEarning: int.parse(_taxableEarningsController.text),
+                    startDate: DateFormat('yyyy-MM-dd').parse(_startDateController.text),
+                    paymentType: _paymentType.name,
+                  );
+                  context.read<EmployeeBloc>().add(AddEmployeeEvent(employee: employee));
+                }
+              }
+            : null,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        child: const Text('Add Employee'),
+      ),
+    );
+  }
+
+  bool get _isFormValid {
+    return _nameController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty &&
+        _phoneController.text.isNotEmpty &&
+        _tinController.text.isNotEmpty &&
+        _grossSalaryController.text.isNotEmpty &&
+        _taxableEarningsController.text.isNotEmpty &&
+        _startDateController.text.isNotEmpty &&
+        _paymentType != PaymentType.none;
   }
 }
 
