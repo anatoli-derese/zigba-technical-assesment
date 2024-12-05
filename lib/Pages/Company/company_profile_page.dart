@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:zigba/Blocs/bloc/Auth/bloc/auth_bloc.dart';
 import 'package:zigba/Blocs/bloc/Company/company_bloc.dart';
 
 class CompanyProfilePage extends StatefulWidget {
@@ -22,7 +23,6 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
   @override
   void initState() {
     super.initState();
-    // Populate the fields with initial values from the bloc state
     final companyState = context.read<CompanyBloc>().state;
     if (companyState is CompanyRegistered) {
       final company = companyState.company;
@@ -41,7 +41,6 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
     try {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        // Handle the picked image, e.g., upload to server or update bloc
       }
     } catch (e) {
       debugPrint('Error picking image: $e');
@@ -89,14 +88,19 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.settings_outlined),
-                        onPressed: () {},
+                        icon: const Icon(Icons.logout),
+                        onPressed: () {
+                          print("logout");
+                          final authBloc = BlocProvider.of<AuthBloc>(context); // Explicit lookup
+                          
+                          authBloc.add(LogoutEvent());
+                          // context.read<AuthBloc>().add(LogoutEvent());
+                        },
                       ),
                     ],
                   ),
                   const SizedBox(height: 32),
 
-                  // Profile Image and Company Info
                   Center(
                     child: Column(
                       children: [
@@ -113,11 +117,9 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                                   width: 3,
                                 ),
                               ),
-                              child: const Icon(
-                                Icons.business,
-                                size: 60,
-                                color: Colors.white,
-                              ),
+                              child:  Image.asset(
+                                "assets/images/company.png",
+                                )
                             ),
                             Positioned(
                               right: 0,
@@ -177,6 +179,7 @@ class _CompanyProfilePageState extends State<CompanyProfilePage> {
                     child: ElevatedButton(
                       onPressed: _saveProfile,
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue  ,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

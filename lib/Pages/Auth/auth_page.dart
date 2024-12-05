@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zigba/Blocs/bloc/Auth/bloc/auth_bloc.dart';
-import 'package:zigba/Pages/register_company.dart';
+import 'package:zigba/Pages/Company/register_company.dart';
 
 
 // ignore: must_be_immutable
@@ -66,8 +66,19 @@ class _AuthPageState extends State<AuthPage> {
           } else if (state is AuthError) {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+                 SnackBar(
+                   content: Text(
+                     state.message,
+                     style: TextStyle(color: Colors.white), 
+                   ),
+                   backgroundColor: Colors.red, 
+                   duration: Duration(seconds: 2), 
+                   behavior: SnackBarBehavior.floating, 
+                   shape: RoundedRectangleBorder( 
+                     borderRadius: BorderRadius.circular(10),
+                   ),
+                 ),
+);
           }
         },
         builder: (context, state) {

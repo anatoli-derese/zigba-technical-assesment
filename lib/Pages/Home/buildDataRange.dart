@@ -21,12 +21,14 @@ Widget _buildDateRange() {
          ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: const Color.fromARGB(255, 240, 208, 206),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              child: const Text('Pay now'),
+              child: const Text('Pay now', style: TextStyle(
+                color: Colors.red
+              ),),
             ),
       ],
     );

@@ -18,9 +18,9 @@
   Widget _buildMetricCard(String title, String value, Color color) {
   return Container(
     decoration: BoxDecoration(
-      color: color.withOpacity(0.15),
+      color: color.withOpacity(0.04),
       border: Border.all(color: color, width: 2), // Add border color and width
-      borderRadius: BorderRadius.circular(8), // Match the Card's border radius
+      borderRadius: BorderRadius.circular(45), // Match the Card's border radius
     ),
     child: Padding(
       padding: const EdgeInsets.all(16.0),

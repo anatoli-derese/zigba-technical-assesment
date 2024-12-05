@@ -202,7 +202,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.blue[100] : Colors.grey[200],
+            color: isSelected ? const Color.fromARGB(255, 85, 162, 225) : const Color.fromARGB(147, 184, 198, 255),
             borderRadius: BorderRadius.circular(25),
           ),
           child: Center(
@@ -240,6 +240,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
               }
             : null,
         style: ElevatedButton.styleFrom(
+          backgroundColor: _isFormValid ? Colors.blue : Colors.grey[200],
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),

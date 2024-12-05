@@ -11,7 +11,7 @@ Widget _buildHeader(BuildContext context) {
       IconButton(
         icon: const Icon(Icons.settings),
         onPressed: () {
-          context.read<AuthBloc>().add(LogoutEvent());
+          
         },
       ),
     ],

@@ -51,27 +51,28 @@ class MyApp extends StatelessWidget {
 
 class AppNavigator extends StatelessWidget {
   const AppNavigator({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
+  builder: (context, state) {
+    print("AuthBloc State: $state"); // Debugging state transitions
+    if (state is AuthLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (state is LoggedIn) {
+      return const Pages();
+    } else if (state is NotLoggedIn || state is AuthInitial) {
+      return const LandingPage();
+    } else if (state is AuthError) {
+      return Scaffold(
+        body: Center(
+          child: Text('Error: ${state.message}'),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  },
+);
 
-        if (state is AuthLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is LoggedIn) {
-          return const Pages();
-        } else if (state is NotLoggedIn || state is AuthInitial) {
-          return const LandingPage();
-        } else if (state is AuthError) {
-          return Scaffold(
-            body: Center(
-              child: Text('Error: ${state.message}'),
-            ),
-          );
-        }
-        return const SizedBox.shrink();
-      },
-    );
-  }
+    
+    }
 }

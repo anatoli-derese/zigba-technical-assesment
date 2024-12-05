@@ -81,14 +81,36 @@ class _CompanyRegistrationPageState extends State<CompanyRegistrationPage> {
     return BlocConsumer<CompanyBloc, CompanyState>(
       listener: (context, state) {
         if (state is CompanyRegistered) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Company registered successfully!')),
-          );
+         ScaffoldMessenger.of(context).showSnackBar(
+                 SnackBar(
+                   content: const Text(
+                     "Company Registered Succesfully",
+                     style: TextStyle(color: Colors.white), 
+                   ),
+                   backgroundColor: Colors.green, 
+                   duration: const Duration(seconds: 3), 
+                   behavior: SnackBarBehavior.floating, 
+                   shape: RoundedRectangleBorder( 
+                     borderRadius: BorderRadius.circular(10),
+                   ),
+                 ),
+);
           Navigator.push(context, MaterialPageRoute(builder:  (_) => const Pages()));
         } else if (state is CompanyError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+                 SnackBar(
+                   content: Text(
+                     state.message,
+                     style: TextStyle(color: Colors.white), 
+                   ),
+                   backgroundColor: Colors.red, 
+                   duration: Duration(seconds: 3), 
+                   behavior: SnackBarBehavior.floating, 
+                   shape: RoundedRectangleBorder( 
+                     borderRadius: BorderRadius.circular(10),
+                   ),
+                 ),
+);
         }
       },
       builder: (context, state) {
@@ -141,13 +163,13 @@ class _CompanyRegistrationPageState extends State<CompanyRegistrationPage> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      _buildTextField(_companyNameController, 'Company name'),
-                      _buildTextField(_addressController, 'Address of the company'),
-                      _buildTextField(_phoneController, 'Phone Number'),
-                      _buildTextField(_tinNumberController, 'Tin Number'),
-                      _buildTextField(_employeesController, 'Number of employees'),
-                      _buildTextField(_bankNameController, 'Company bank'),
-                      _buildTextField(_accountNumberController, 'Bank account number'),
+                      _buildTextField(_companyNameController, 'Company name', keyboardType: TextInputType.name),
+                      _buildTextField(_addressController, 'Address of the company', keyboardType: TextInputType.streetAddress),
+                      _buildTextField(_phoneController, 'Phone Number', keyboardType: TextInputType.phone),
+                      _buildTextField(_tinNumberController, 'Tin Number', keyboardType: const TextInputType.numberWithOptions(decimal: false)),
+                      _buildTextField(_employeesController, 'Number of employees', keyboardType: const TextInputType.numberWithOptions(decimal: false)),
+                      _buildTextField(_bankNameController, 'Company bank', keyboardType: TextInputType.name),
+                      _buildTextField(_accountNumberController, 'Bank account number', keyboardType:const TextInputType.numberWithOptions(decimal: false)),
                       const SizedBox(height: 24),
                       SizedBox(
                         width: double.infinity,
@@ -191,10 +213,12 @@ class _CompanyRegistrationPageState extends State<CompanyRegistrationPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label) {
+  Widget _buildTextField(TextEditingController controller, String label, {TextInputType keyboardType = TextInputType.text}) {
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: TextFormField(
+        keyboardType: keyboardType,
         controller: controller,
         decoration: InputDecoration(
           labelText: label,

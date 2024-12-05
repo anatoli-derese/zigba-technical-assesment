@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zigba/Blocs/bloc/Auth/bloc/auth_bloc.dart';
 part 'buildDataRange.dart';
 part 'buildHeader.dart';
 part 'buildMetricCard.dart';

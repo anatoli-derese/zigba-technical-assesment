@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:zigba/Pages/Home/home_page.dart';
-import 'package:zigba/Pages/add_employee.dart';
-import 'package:zigba/Pages/company_profile_page.dart';
-import 'package:zigba/Pages/employee_list.dart';
+import 'package:zigba/Pages/Company/company_profile_page.dart';
+import 'package:zigba/Pages/Employee/employee_list.dart';
 
 
 
@@ -26,17 +25,18 @@ class Pages extends StatelessWidget {
     List<PersistentBottomNavBarItem> navBarsItems() {
       return [
         PersistentBottomNavBarItem(
-          icon: const Icon(Icons.home_rounded),
+          // icon from image
+          icon: Image.asset('assets/images/home.png', width: 30, height: 30),
           activeColorPrimary: Colors.blue,
           inactiveColorPrimary: Colors.grey,
         ),
         PersistentBottomNavBarItem(
-          icon: const Icon(Icons.calendar_month_outlined),
+          icon: Image.asset('assets/images/note.png', width: 30, height: 30),
           activeColorPrimary: Colors.blue,
           inactiveColorPrimary: Colors.grey,
         ),
         PersistentBottomNavBarItem(
-          icon: const Icon(Icons.person),
+          icon: Image.asset('assets/images/person.png', width: 30, height: 30),
           activeColorPrimary: Colors.blue,
           inactiveColorPrimary: Colors.grey,
         ),
@@ -61,24 +61,3 @@ class Pages extends StatelessWidget {
     );
   }
 }
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-  
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
-
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
-  
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
-

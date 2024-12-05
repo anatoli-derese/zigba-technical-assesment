@@ -27,14 +27,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onLogout(LogoutEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
     try {
       await authRepository.logout();
       emit(NotLoggedIn());
+      print(state);
     } catch (e) {
       emit(AuthError('Logout failed: ${e.toString()}'));
     }
-    emit(NotLoggedIn());
+    
   }
 
   void _onCheckLoggedIn(CheckLoggedInEvent event, Emitter<AuthState> emit) {
