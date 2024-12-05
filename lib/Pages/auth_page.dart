@@ -207,6 +207,28 @@ class _AuthPageState extends State<AuthPage> {
                             child: Text(isLogin ? 'Login' : 'Sign up'),
                           ),
                         ),
+                        // Google Sign In
+                        const Text(
+                          'Or continue with a social media account'    
+                        ),
+                        const SizedBox(height: 50),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton.icon(
+                            onPressed: () {},
+                            // Icon from image
+                            icon: const Image(image:  AssetImage('assets/images/google.png')),
+                            label: const Text('Google'),
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black, backgroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
