@@ -3,6 +3,8 @@ import 'package:Demoz/Models/Employee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+part  'build_header.dart';
+part 'build_text_field.dart';
 
 class AddEmployeePage extends StatefulWidget {
   const AddEmployeePage({super.key});
@@ -97,41 +99,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     );
   }
 
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        RichText(
-          text: TextSpan(
-            children: [
-              const TextSpan(
-                text: 'Add New ',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              TextSpan(
-                text: 'Employee',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue[500],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Here you add your new employee and start calculating his tax and salary',
-          style: TextStyle(color: Colors.grey[600]),
-        ),
-        const SizedBox(height: 24),
-      ],
-    );
-  }
+  
 
   Widget _buildFormFields() {
     return Column(
@@ -152,32 +120,7 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    TextInputType? keyboardType,
-    bool readOnly = false,
-    VoidCallback? onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: TextFormField(
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: label,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-        ),
-        keyboardType: keyboardType,
-        readOnly: readOnly,
-        onTap: onTap,
-      ),
-    );
-  }
-
-  Widget _buildPaymentTypeSelector() {
+ Widget _buildPaymentTypeSelector() {
     return Row(
       children: [
         _buildPaymentTypeButton(title: 'Per Month', type: PaymentType.monthly),
@@ -217,6 +160,8 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
       ),
     );
   }
+
+
 
   Widget _buildSubmitButton(BuildContext context) {
     return SizedBox(
@@ -262,6 +207,8 @@ class _AddEmployeePageState extends State<AddEmployeePage> {
         _paymentType != PaymentType.none;
   }
 }
+
+
 
 enum PaymentType {
   none,
