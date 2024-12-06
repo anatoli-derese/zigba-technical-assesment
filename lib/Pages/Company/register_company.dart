@@ -84,7 +84,7 @@ class _CompanyRegistrationPageState extends State<CompanyRegistrationPage> {
          ScaffoldMessenger.of(context).showSnackBar(
                  SnackBar(
                    content: const Text(
-                     "Company Registered Succesfully",
+                     "Company Registered",
                      style: TextStyle(color: Colors.white), 
                    ),
                    backgroundColor: Colors.green, 

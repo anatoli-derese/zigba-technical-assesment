@@ -13,6 +13,17 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
     on<AddEmployeeEvent>(_onAddEmployee);
     on<RemoveEmployeeEvent>(_onRemoveEmployee);
     on<GetEmployeesEvent>(_onGetEmployees);
+    on<DeleteAllEmployeesEvent>(_onDeleteAllEmployees);
+
+  }
+
+  Future<void> _onDeleteAllEmployees(DeleteAllEmployeesEvent event, Emitter<EmployeeState> emit) async {
+    try {
+      employeeRepository.deleteAllEmployees();
+      emit(EmployeesLoaded(employees: []));
+    } catch (e) {
+      emit(EmployeeError(message: 'Failed to delete all employees: ${e.toString()}'));
+    }
   }
 
   Future<void> _onAddEmployee(AddEmployeeEvent event, Emitter<EmployeeState> emit) async {

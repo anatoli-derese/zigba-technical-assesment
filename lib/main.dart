@@ -84,7 +84,6 @@ class AppNavigator extends StatelessWidget {
     } else if (authState is LoggedIn) {
       return BlocBuilder<CompanyBloc, CompanyState>(
         builder: (context, companyState) {
-          print(companyState);
           if (companyState is CompanyRegistered) {
             return const Pages(); 
           } else {

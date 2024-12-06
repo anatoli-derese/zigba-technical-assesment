@@ -5,7 +5,7 @@ part 'buildMetricCard.dart';
 part 'buildTabs.dart';
 part 'buildTaxInfo.dart';
 part 'buildBottomRow.dart';
-
+part 'tabs_wrapper.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -15,7 +15,6 @@ class HomePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -23,7 +22,7 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 20),
               _buildMetricCards(),
               const SizedBox(height: 20),
-              _buildTabs(),
+              const TabsWrapper(), // Use the wrapper here
               const SizedBox(height: 20),
               _buildDateRange(),
               const SizedBox(height: 20),
@@ -43,8 +42,8 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
 }
+
 
 
 

@@ -21,4 +21,7 @@ class EmployeeRepository {
   List<Employee> getAllEmployees() {
     return _employeeBox.values.toList();
   }
+  void deleteAllEmployees() {
+    _employeeBox.clear();
+  }
 }

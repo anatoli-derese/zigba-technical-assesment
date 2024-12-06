@@ -13,4 +13,6 @@ final class RemoveEmployeeEvent extends EmployeeEvent {
   RemoveEmployeeEvent({required this.tin});
 }
 
+final class DeleteAllEmployeesEvent extends EmployeeEvent {}
+
 final class GetEmployeesEvent extends EmployeeEvent {}

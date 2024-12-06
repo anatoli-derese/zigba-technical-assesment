@@ -116,7 +116,10 @@ class EmployeePage extends StatelessWidget {
                              borderRadius: BorderRadius.all(Radius.circular(8)),
                            ),
                                        ),
-                                       onPressed: () {},
+                                       onPressed: () {
+                                        final employeeBloc = BlocProvider.of<EmployeeBloc>(context);
+                                        employeeBloc.add(DeleteAllEmployeesEvent());
+                                       },
                                        child: const Text('Bulk Pay'),
                                       ),
                       ),
